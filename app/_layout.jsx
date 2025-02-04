@@ -2,7 +2,9 @@ import { StyleSheet, Text, View } from "react-native";
 import React, { useEffect } from "react";
 import "./global.css";
 import { useFonts } from "expo-font";
-import { SplashScreen } from "expo-router";
+import { SplashScreen, Stack } from "expo-router";
+
+SplashScreen.preventAutoHideAsync();
 
 const _layout = () => {
   const [fontsLoaded, error] = useFonts({
@@ -26,12 +28,10 @@ const _layout = () => {
   }, [fontsLoaded, error]);
 
   return (
-    <View>
-      <Text>_layouact</Text>
-    </View>
+    <Stack>
+      <Stack.Screen name="index" options={{ headerShown: false }} />
+    </Stack>
   );
 };
 
 export default _layout;
-
-const styles = StyleSheet.create({});
