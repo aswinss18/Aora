@@ -18,14 +18,11 @@ const _layout = () => {
     "Poppins-SemiBold": require("../assets/fonts/Poppins-SemiBold.ttf"),
     "Poppins-Thin": require("../assets/fonts/Poppins-Thin.ttf"),
   });
-
   useEffect(() => {
     if (error) throw error;
 
     if (fontsLoaded) SplashScreen.hideAsync();
-
-    if (!fontsLoaded && !error) return null;
-  }, [fontsLoaded, error]);
+  }, [fontsLoaded, error]); // ✅ Removed `return null;`
 
   return (
     <Stack>
