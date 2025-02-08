@@ -28,6 +28,7 @@ const FormField = ({
       >
         <View style={styles.innerView}>
           <TextInput
+            style={styles.input}
             value={value}
             placeholder={placeholder}
             placeholderTextColor="#cccccc"
@@ -68,4 +69,5 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   passwordEye: { width: 24, height: 24 },
+  input: { flex: 1, color: "white" },
 });
