@@ -1,14 +1,80 @@
-import { StyleSheet, Text, View } from "react-native";
-import React from "react";
+import { Image, ScrollView, StyleSheet, Text, View } from "react-native";
+import React, { useState } from "react";
+import { SafeAreaView } from "react-native-safe-area-context";
+import { images } from "../../constants";
+import FormField from "../../components/FormField";
+import CustomButton from "../../components/CustomButton";
+import { Link } from "expo-router";
 
-const Signup = () => {
+const SignUp = () => {
+  const [form, setForm] = useState({ username: "", email: "", password: "" });
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const submit = () => {};
+
   return (
-    <View>
-      <Text>Signup</Text>
-    </View>
+    <SafeAreaView style={styles.safeArea}>
+      <ScrollView>
+        <View style={styles.container}>
+          <Image style={styles.img} source={images.logo} resizeMode="contain" />
+          <Text style={styles.loginText}>Sign up to Aora</Text>{" "}
+          <FormField
+            title="Username"
+            value={form.username}
+            handleChangeText={(e) => setForm({ ...form, username: e })}
+            otherStyles={{ marginTop: 70 }}
+          />
+          <FormField
+            title="Email"
+            value={form.email}
+            handleChangeText={(e) => setForm({ ...form, email: e })}
+            keyboardType="email-address"
+            otherStyles={{ marginTop: 30 }}
+          />{" "}
+          <FormField
+            title="Password"
+            value={form.password}
+            handleChangeText={(e) => setForm({ ...form, password: e })}
+            otherStyles={{ marginTop: 30 }}
+          />
+          <CustomButton
+            title="Sign In"
+            handlePress={submit}
+            containerStyles={{ marginTop: 40 }}
+            isLoading={isSubmitting}
+          />
+          <View style={styles.bottomContainer}>
+            <Text style={styles.bottomText}>Have an account already?</Text>
+            <Link style={styles.link} href="/sign-in">
+              Sign In
+            </Link>
+          </View>
+        </View>
+      </ScrollView>
+    </SafeAreaView>
   );
 };
 
-export default Signup;
+export default SignUp;
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+  safeArea: { backgroundColor: "#161622", flex: 1 }, // Use flex: 1 instead of height
+  container: {
+    width: "100%",
+    height: "100%",
+    justifyContent: "center",
+    minHeight: "85%", // Remove 'vh' and use percentage or flex
+    paddingHorizontal: 30,
+    marginVertical: 50,
+  },
+  img: { width: 115, height: 35 },
+  loginText: { fontSize: 22, fontWeight: "600", marginTop: 70, color: "white" },
+  bottomContainer: {
+    justifyContent: "center",
+    paddingTop: 20, // Remove 'px'
+    flexDirection: "row",
+    gap: 10, // Remove 'px'
+  },
+  bottomText: { color: "#ccc" },
+  link: { color: "orange" },
+});
