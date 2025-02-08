@@ -1,18 +1,29 @@
-import { Image, ScrollView, StyleSheet, Text, View } from "react-native";
+import { Alert, Image, ScrollView, StyleSheet, Text, View } from "react-native";
 import React, { useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { images } from "../../constants";
 import FormField from "../../components/FormField";
 import CustomButton from "../../components/CustomButton";
-import { Link } from "expo-router";
+import { Link, router } from "expo-router";
 import { createUser } from "../../lib/appwrite";
 
 const SignUp = () => {
   const [form, setForm] = useState({ username: "", email: "", password: "" });
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const submit = () => {
-    createUser();
+  const submit = async () => {
+    if (!form.email || !form.username || !form.password) {
+      Alert.alert("Error", "Please fill in all the fields");
+    }
+    setIsSubmitting(true);
+    try {
+      const result = await createUser(form.email, form.password, form.username);
+      router.replace("/home");
+    } catch (error) {
+      Alert.alert("Error", error.message);
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -49,7 +60,7 @@ const SignUp = () => {
           <View style={styles.bottomContainer}>
             <Text style={styles.bottomText}>Have an account already?</Text>
             <Link style={styles.link} href="/sign-in">
-              Sign In
+              Sign Up
             </Link>
           </View>
         </View>
