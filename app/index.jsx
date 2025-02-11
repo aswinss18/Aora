@@ -13,7 +13,7 @@ const index = () => {
   const { isLoading, isLoggedIn, user } = useGlobalContext();
 
   console.log(isLoggedIn);
-  if (isLoading || isLoggedIn) {
+  if (!isLoading && isLoggedIn) {
     return <Redirect href="/home" />;
   }
 
