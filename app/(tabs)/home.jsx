@@ -1,5 +1,12 @@
-import { FlatList, Image, StyleSheet, Text, View } from "react-native";
-import React from "react";
+import {
+  FlatList,
+  Image,
+  RefreshControl,
+  StyleSheet,
+  Text,
+  View,
+} from "react-native";
+import React, { useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { images } from "../../constants";
 import SearchInput from "../../components/SearchInput";
@@ -8,20 +15,26 @@ import { StatusBar } from "expo-status-bar";
 import EmptyState from "../../components/EmptyState";
 
 const Home = () => {
+  const [refreshing, setRefreshing] = useState(false);
+  const onRefresh = async () => {
+    setRefreshing(true);
+    setTimeout(() => {
+      setRefreshing(false);
+    }, 3000);
+  };
+
   return (
     <SafeAreaView style={styles.mainContainer}>
       <StatusBar style="light" />
       <FlatList
-        data={
-          [
-            // { id: 1 },
-            // { id: 5 },
-            // { id: 7 },
-            // { id: 4 },
-            // { id: 2 },
-            // { id: 6 },
-          ]
-        }
+        data={[
+          { id: 1 },
+          { id: 5 },
+          { id: 7 },
+          { id: 4 },
+          { id: 2 },
+          { id: 6 },
+        ]}
         keyExtractor={(item) => item.$id}
         renderItem={({ item }) => <Text style={styles.text}>{item.id}</Text>}
         ListHeaderComponent={() => (
@@ -78,6 +91,9 @@ const Home = () => {
             subtitle="Be the first one to upload video."
           />
         )}
+        refreshControl={
+          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+        }
       />
     </SafeAreaView>
   );
@@ -87,7 +103,7 @@ export default Home;
 
 const styles = StyleSheet.create({
   text: { fontSize: 20, color: "white" },
-  mainContainer: { backgroundColor: "#161622" },
+  mainContainer: { backgroundColor: "#161622", height: "100%" },
   headerContainer: {
     marginVertical: 30,
     paddingHorizontal: 20,
