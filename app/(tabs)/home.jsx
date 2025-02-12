@@ -15,14 +15,16 @@ import Trending from "../../components/Trending";
 import { StatusBar } from "expo-status-bar";
 import EmptyState from "../../components/EmptyState";
 import { getAllPosts } from "../../lib/appwrite";
+import useAppwrite from "../../lib/useAppwrite";
 
 const Home = () => {
+  const { data: posts, isLoading, refetch } = useAppwrite(getAllPosts);
+
   const [refreshing, setRefreshing] = useState(false);
   const onRefresh = async () => {
     setRefreshing(true);
-    setTimeout(() => {
-      setRefreshing(false);
-    }, 3000);
+    await refetch();
+    setRefreshing(false);
   };
 
   return (
