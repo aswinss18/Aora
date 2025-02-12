@@ -3,19 +3,25 @@ import React from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { images } from "../../constants";
 import SearchInput from "../../components/SearchInput";
+import Trending from "../../components/Trending";
+import { StatusBar } from "expo-status-bar";
+import EmptyState from "../../components/EmptyState";
 
 const Home = () => {
   return (
     <SafeAreaView style={styles.mainContainer}>
+      <StatusBar style="light" />
       <FlatList
-        data={[
-          { id: 1 },
-          { id: 5 },
-          { id: 7 },
-          { id: 4 },
-          { id: 2 },
-          { id: 6 },
-        ]}
+        data={
+          [
+            // { id: 1 },
+            // { id: 5 },
+            // { id: 7 },
+            // { id: 4 },
+            // { id: 2 },
+            // { id: 6 },
+          ]
+        }
         keyExtractor={(item) => item.$id}
         renderItem={({ item }) => <Text style={styles.text}>{item.id}</Text>}
         ListHeaderComponent={() => (
@@ -41,7 +47,36 @@ const Home = () => {
               </View>
             </View>
             <SearchInput />
+            <View
+              style={{
+                width: "100%",
+                flex: 1,
+                paddingTop: 30,
+                paddingBottom: 50,
+              }}
+            >
+              <Text style={{ color: "#ccc", fontSize: 16 }}>Latest Videos</Text>
+              <Trending
+                posts={
+                  [
+                    { id: 1 },
+                    { id: 5 },
+                    { id: 4 },
+                    { id: 12 },
+                    { id: 13 },
+                    { id: 123 },
+                    { id: 10 },
+                  ] ?? []
+                }
+              />
+            </View>
           </View>
+        )}
+        ListEmptyComponent={({ item }) => (
+          <EmptyState
+            title="No Videos Found"
+            subtitle="Be the first one to upload video."
+          />
         )}
       />
     </SafeAreaView>

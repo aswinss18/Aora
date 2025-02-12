@@ -29,7 +29,7 @@ const SearchInput = ({
           <TextInput
             style={styles.input}
             value={value}
-            placeholder={placeholder}
+            placeholder="Search for a video topic"
             placeholderTextColor="#cccccc"
             onChangeText={handleChangeText}
             secureTextEntry={title === "Password" && !showPassword}
