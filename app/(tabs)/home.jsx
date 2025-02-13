@@ -7,6 +7,7 @@ import {
   Text,
   View,
 } from "react-native";
+
 import React, { useEffect, useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { images } from "../../constants";
@@ -15,11 +16,12 @@ import Trending from "../../components/Trending";
 import VideoCard from "../../components/VideoCard";
 import { StatusBar } from "expo-status-bar";
 import EmptyState from "../../components/EmptyState";
-import { getAllPosts } from "../../lib/appwrite";
+import { getAllPosts, getLatestPosts } from "../../lib/appwrite";
 import useAppwrite from "../../lib/useAppwrite";
 
 const Home = () => {
   const { data: posts, isLoading, refetch } = useAppwrite(getAllPosts);
+  const { data: latestPosts } = useAppwrite(getLatestPosts);
 
   const [refreshing, setRefreshing] = useState(false);
   const onRefresh = async () => {
@@ -67,19 +69,7 @@ const Home = () => {
               }}
             >
               <Text style={{ color: "#ccc", fontSize: 16 }}>Latest Videos</Text>
-              <Trending
-                posts={
-                  [
-                    { id: 1 },
-                    { id: 5 },
-                    { id: 4 },
-                    { id: 12 },
-                    { id: 13 },
-                    { id: 123 },
-                    { id: 10 },
-                  ] ?? []
-                }
-              />
+              <Trending posts={latestPosts ?? []} />
             </View>
           </View>
         )}

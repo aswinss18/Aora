@@ -1,5 +1,5 @@
-import { Image, StyleSheet, Text, View } from "react-native";
-import React from "react";
+import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import React, { useState } from "react";
 import { icons, images } from "../constants";
 
 const VideoCard = ({
@@ -11,6 +11,8 @@ const VideoCard = ({
     creator: { username, avatar },
   },
 }) => {
+  const [play, setPlay] = useState(false);
+
   return (
     <View style={styles.container}>
       <View style={styles.view1}>
@@ -47,6 +49,44 @@ const VideoCard = ({
           />
         </View>
       </View>
+      {!play ? (
+        <Text style={{ color: "white" }}>Playing</Text>
+      ) : (
+        <TouchableOpacity
+          onPress={() => setPlay(!play)}
+          activeOpacity={0.7}
+          style={{
+            width: "100%",
+            height: 200,
+            marginTop: 20,
+            position: "relative",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
+          <Image
+            source={{ uri: thumbnail }}
+            style={{
+              width: "100%",
+              height: "100%",
+              borderRadius: 12,
+              marginTop: 20,
+            }}
+            resizeMode="cover"
+          />
+          <Image
+            source={icons.play}
+            style={{
+              width: 30,
+              height: 30,
+              borderRadius: 12,
+              marginTop: 20,
+              position: "absolute",
+            }}
+            resizeMode="contain"
+          />
+        </TouchableOpacity>
+      )}
     </View>
   );
 };
