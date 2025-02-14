@@ -28,15 +28,13 @@ const TrendingItem = memo(({ item, activeItem }) => {
       }}
     >
       {play ? (
-        <View>
-          <WebView
-            source={{
-              uri: item.video,
-            }}
-            style={styles.video}
-            allowsFullscreenVideo
-          />
-        </View>
+        <WebView
+          source={{
+            uri: item.video,
+          }}
+          style={styles.video}
+          allowsFullscreenVideo
+        />
       ) : (
         <TouchableOpacity
           onPress={() => setPlay(true)}
@@ -49,6 +47,7 @@ const TrendingItem = memo(({ item, activeItem }) => {
           />
           <Image
             source={icons.play}
+            onPress={() => setPlay(true)}
             style={styles.playIcon}
             resizeMode="contain"
           />
