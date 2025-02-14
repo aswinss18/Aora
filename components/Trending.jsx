@@ -2,20 +2,19 @@ import {
   Image,
   ImageBackground,
   StyleSheet,
-  Text,
   TouchableOpacity,
   View,
+  FlatList,
 } from "react-native";
 import React, { useEffect, useState, memo } from "react";
-import { FlatList } from "react-native";
 import * as Animatable from "react-native-animatable";
-import { icons } from "../constants";
-import { ResizeMode, Video } from "expo-av";
+import { WebView } from "react-native-webview"; // ✅ Correct import
+import { icons } from "../constants"; // 🔍 Ensure icons is correctly imported
 
 const zoomIn = { 0: { scale: 0.95 }, 1: { scale: 1 } };
 const zoomOut = { 0: { scale: 1 }, 1: { scale: 0.95 } };
 
-// Memoizing to avoid unnecessary re-renders
+// Memoized to avoid unnecessary re-renders
 const TrendingItem = memo(({ item, activeItem }) => {
   const [play, setPlay] = useState(false);
   const isActive = activeItem === item?.$id;
@@ -24,48 +23,33 @@ const TrendingItem = memo(({ item, activeItem }) => {
     <Animatable.View
       animation={isActive ? zoomIn : zoomOut}
       duration={500}
-      style={{ marginRight: 10 }}
+      style={{
+        marginRight: 10,
+      }}
     >
       {play ? (
-        <Video
-          source={{ uri: item.video }}
-          style={{
-            width: 160,
-            height: 240,
-            borderRadius: 34,
-            overflow: "hidden",
-            marginVertical: 30,
-          }}
-          resizeMode={ResizeMode.CONTAIN}
-          useNativeControls
-          shouldPlay
-          onPlaybackStatusUpdate={(status) => {
-            if (status.didJustFinish) setPlay(false);
-          }}
-        />
+        <View>
+          <WebView
+            source={{
+              uri: item.video,
+            }}
+            style={styles.video}
+            allowsFullscreenVideo
+          />
+        </View>
       ) : (
         <TouchableOpacity
           onPress={() => setPlay(true)}
-          style={{
-            position: "relative",
-            justifyContent: "center",
-            alignItems: "center",
-          }}
+          style={styles.touchable}
         >
           <ImageBackground
             source={{ uri: item.thumbnail }}
-            style={{
-              width: 160,
-              height: 240,
-              borderRadius: 34,
-              overflow: "hidden",
-              marginVertical: 30,
-            }}
+            style={styles.thumbnail}
             resizeMode="cover"
           />
           <Image
             source={icons.play}
-            style={{ position: "absolute", width: 30, height: 30 }}
+            style={styles.playIcon}
             resizeMode="contain"
           />
         </TouchableOpacity>
@@ -75,18 +59,15 @@ const TrendingItem = memo(({ item, activeItem }) => {
 });
 
 const Trending = ({ posts }) => {
-  const [activeItem, setActiveItem] = useState(null);
+  const [activeItem, setActiveItem] = useState(
+    posts.length > 0 ? posts[0].$id : null
+  );
+
   const viewableItemsChange = ({ viewableItems }) => {
     if (viewableItems.length > 0) {
       setActiveItem(viewableItems[0].key);
     }
   };
-
-  useEffect(() => {
-    if (posts.length > 0) {
-      setActiveItem(posts[1]); // Set only once when posts change
-    }
-  }, [posts]); // Only update when `posts` change
 
   return (
     <FlatList
@@ -94,7 +75,7 @@ const Trending = ({ posts }) => {
       viewabilityConfig={{ itemVisiblePercentThreshold: 70 }}
       horizontal
       data={posts}
-      keyExtractor={(item) => item.$id}
+      keyExtractor={(item) => item.$id || Math.random().toString()}
       renderItem={({ item }) => (
         <TrendingItem activeItem={activeItem} item={item} />
       )}
@@ -104,4 +85,30 @@ const Trending = ({ posts }) => {
 
 export default Trending;
 
-const styles = StyleSheet.create({ text: { color: "white", fontSize: 20 } });
+const styles = StyleSheet.create({
+  video: {
+    width: 180,
+    height: 240,
+    borderRadius: 34,
+    overflow: "hidden",
+    marginVertical: 30,
+    backgroundColor: "black",
+  },
+  touchable: {
+    position: "relative",
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  thumbnail: {
+    width: 160,
+    height: 240,
+    borderRadius: 34,
+    overflow: "hidden",
+    marginVertical: 30,
+  },
+  playIcon: {
+    position: "absolute",
+    width: 30,
+    height: 30,
+  },
+});
