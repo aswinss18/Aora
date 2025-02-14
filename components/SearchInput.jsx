@@ -11,10 +11,10 @@ import { icons } from "../constants";
 import { usePathname, useRouter } from "expo-router";
 import { Alert } from "react-native";
 
-const SearchInput = () => {
+const SearchInput = ({ initialQuery }) => {
   const pathname = usePathname();
   const router = useRouter();
-  const [query, setQuery] = useState("");
+  const [query, setQuery] = useState(initialQuery || "");
 
   return (
     <View style={{ borderRadius: 12 }}>
