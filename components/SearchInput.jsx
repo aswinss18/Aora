@@ -8,16 +8,13 @@ import {
 } from "react-native";
 import React, { useState } from "react";
 import { icons } from "../constants";
+import { usePathname, useRouter } from "expo-router";
+import { Alert } from "react-native";
 
-const SearchInput = ({
-  title,
-  value,
-  placeholder,
-  handleChangeText,
-  otherStyles,
-  ...props
-}) => {
-  const [showPassword, setShowPassword] = useState(false);
+const SearchInput = () => {
+  const pathname = usePathname();
+  const router = useRouter();
+  const [query, setQuery] = useState("");
 
   return (
     <View style={{ borderRadius: 12 }}>
@@ -28,14 +25,25 @@ const SearchInput = ({
         <View style={styles.innerView}>
           <TextInput
             style={styles.input}
-            value={value}
+            value={query}
             placeholder="Search for a video topic"
-            placeholderTextColor="#cccccc"
-            onChangeText={handleChangeText}
-            secureTextEntry={title === "Password" && !showPassword}
+            placeholderTextColor="#cdcde0"
+            onChangeText={(e) => setQuery(e)}
           />
 
-          <TouchableOpacity onPress={() => setShowPassword(!showPassword)}>
+          <TouchableOpacity
+            onPress={() => {
+              if (!query) {
+                return Alert.alert(
+                  "Missing query",
+                  "Please input something to search results across database"
+                );
+              }
+              if (pathname.startsWith("/search")) {
+                router.setParams({ query });
+              } else router.push(`/search/${query}`);
+            }}
+          >
             <Image
               source={icons.search}
               style={styles.passwordEye}
