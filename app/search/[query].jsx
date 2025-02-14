@@ -7,7 +7,16 @@ const Search = () => {
 
   return (
     <View>
-      <Text style={{ color: "white", fontSize: 20 }}>Search</Text>
+      <Text
+        style={{
+          color: "white",
+          fontSize: 20,
+          backgroundColor: "#161622",
+          minHeight: "100%",
+        }}
+      >
+        {query}
+      </Text>
     </View>
   );
 };
